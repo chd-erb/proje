@@ -1,43 +1,43 @@
 // Zar arayüzü (Interface)
-class IDice {
-    roll() {
-        throw new Error("roll() metodu implement edilmeli.");
+class Zar {
+    zarAt() {
+        throw new Error("zarAt() metodu implement edilmeli.");
     }
 }
 
 // Standart 6 yüzlü zar
-class StandardDice extends IDice {
-    constructor(sides = 6) {
+class StandartZar extends Zar {
+    constructor(yuzSayisi = 6) {
         super();
-        this.sides = sides;
+        this.yuzSayisi = yuzSayisi;
     }
 
-    roll() {
-        return Math.floor(Math.random() * this.sides) + 1;
-    }
-}
-
-// Zar atma servisi (Dependency Injection ile)
-class DiceRoller {
-    constructor(dice) {
-        this.dice = dice;
-    }
-
-    rollDice() {
-        return this.dice.roll();
+    zarAt() {
+        return Math.floor(Math.random() * this.yuzSayisi) + 1;
     }
 }
 
-// UI ile bağlantı
+// Zar atma servisi (Bağımlılıkları dışarıdan alır)
+class ZarAtici {
+    constructor(zar) {
+        this.zar = zar;
+    }
+
+    zarAt() {
+        return this.zar.zarAt();
+    }
+}
+
+// Arayüz ile bağlantı
 document.addEventListener("DOMContentLoaded", function () {
-    const dice = new StandardDice();
-    const roller = new DiceRoller(dice);
+    const standartZar = new StandartZar();
+    const zarAtici = new ZarAtici(standartZar);
 
-    const resultDiv = document.getElementById("diceResult");
-    const rollBtn = document.getElementById("rollBtn");
+    const sonucDiv = document.getElementById("diceResult");
+    const zarAtBtn = document.getElementById("rollBtn");
 
-    rollBtn.addEventListener("click", function () {
-        const result = roller.rollDice();
-        resultDiv.textContent = result;
+    zarAtBtn.addEventListener("click", function () {
+        const sonuc = zarAtici.zarAt();
+        sonucDiv.textContent = sonuc;
     });
 });
